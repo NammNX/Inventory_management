@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Xóa sản phẩm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Xóa sản phẩm</h1>
+    <form method="post">
+        <table>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Select</th>
+            </tr>
+            {% for items in items %}
+            <tr>
+                <td>{{ items.code }}</td>
+                <td>{{ items.name }}</td>
+                <td><input type="checkbox" name="items_ids" value="{{ items._id }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <input type="submit" value="Xóa">
+    </form>
+    <a href="{{ url_for('home') }}">Trang chủ</a>
+</body>
+</html>

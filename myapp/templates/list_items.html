@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Items</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+	<h1>Sản phẩm</h1>
+	<table>
+		<tr>
+			<th>Mã sản phẩm</th>
+			<th>Tên sản phẩm</th>
+		</tr>
+		{% for items in items %}
+		<tr>
+			<td>{{ items['code'] }}</td>
+			<td>{{ items['name'] }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<a href="{{ url_for('home') }}">Trang chủ</a>
+</body>
+</html>

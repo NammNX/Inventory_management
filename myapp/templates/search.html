@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Customer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Tìm sản phẩm</h1>
+    <form method="POST" action="/search_items">
+        <label>Mã sản phẩm:</label>
+        <input type="text" name="code">
+        <br>
+        <label>Tên sản phẩm:</label>
+        <input type="text" name="name">
+        <br>
+        <input type="submit" value="Tìm kiếm">
+    </form>
+    {% if items %}
+    <table>
+        <thead>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for items in items %}
+            <tr>
+                <td>{{ items.code }}</td>
+                <td>{{ items.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Trang chủ</a>
+</body>
+</html>

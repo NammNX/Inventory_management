@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </style>
+</head>
+<body>
+    <h1>Thêm sản phẩm</h1>
+    <form method="POST" action="/add_items">
+        <label>Mã sản phẩm:</label>
+        <input type="text" name="code" required>
+        <br>
+        <label>Tên sản phẩm:</label>
+        <input type="text" name="name" required>
+        <br>
+        <label>Hình ảnh:</label>
+        <input type="file" name="image" >
+        <br>
+
+        <input type="submit" value="Add">
+    </form>
+    {% if items %}
+    <table>
+        <thead>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for items in items %}
+            <tr>
+                <td>{{ items.code }}</td>
+                <td>{{ items.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Trang chủ</a>
+</body>
+</html>
