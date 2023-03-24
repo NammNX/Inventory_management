@@ -4,36 +4,66 @@
     <meta charset="UTF-8">
     <title>Search Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#check-all').click(function(){
+                $('input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Tìm sản phẩm</h1>
-    <form method="POST" action="/search_items">
-        <label>Mã sản phẩm:</label>
-        <input type="text" name="code">
+    <form method="POST" action="/search_items" enctype="multipart/form-data">
+<!--        <label>Mã sản phẩm:</label>-->
+<!--        <input type="text" name="code">-->
+
+        <label>Tìm kiếm:</label>
+        <input type="text" name="search_query" placeholder="Nhập tên hoặc mã sản phẩm">
         <br>
-        <label>Tên sản phẩm:</label>
-        <input type="text" name="name">
+        <label>Ngày bắt đầu:</label>
+        <input type="date" name="start_date">
+
+        <label>Ngày kết thúc:</label>
+        <input type="date" name="end_date">
         <br>
+
         <input type="submit" value="Tìm kiếm">
-    </form>
+       <a href="{{ url_for('home') }}" class="home-btn">Trang chủ</a>
+
+
     {% if items %}
     <table>
         <thead>
             <tr>
                 <th>Mã sản phẩm</th>
                 <th>Tên sản phẩm</th>
-            </tr>
+                <th>Hình ảnh</th>
+                <th>Thời gian</th>
+                <th>Select
+                <input type="checkbox" id="check-all">
+                <label for="check-all"></label></th>
+                </tr>
         </thead>
         <tbody>
             {% for items in items %}
             <tr>
                 <td>{{ items.code }}</td>
                 <td>{{ items.name }}</td>
+                {% if items.image %}
+                    <td><img src="{{ url_for('static', filename='uploads/' + items.image) }}" alt="image" width="200" height="150"></td>
+                {% else %}
+                    <td>No image</td>
+                {% endif %}
+                <td>{{ items.timestamp.strftime('%H:%M:%S - %d/%m/%Y') }}</td>
+                <td><input type="checkbox" name="items_ids" value="{{ items._id }}"></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <input type="submit" value="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
     {% endif %}
-    <a href="{{ url_for('home') }}">Trang chủ</a>
+    </form>
 </body>
 </html>

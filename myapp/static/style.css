@@ -71,6 +71,14 @@ a {
 a:hover {
   background-color: #0056b3;
 }
+.home-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+
+
 
 @media (max-width: 767px) {
   a {

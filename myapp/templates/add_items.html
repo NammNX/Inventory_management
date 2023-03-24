@@ -2,13 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Trang chủ</title>
+    <title>Add item</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </style>
 </head>
 <body>
+     <a href="{{ url_for('home') }}">Trang chủ</a>
     <h1>Thêm sản phẩm</h1>
-    <form method="POST" action="/add_items">
+    <form method="POST" enctype="multipart/form-data" action="/add_items">
         <label>Mã sản phẩm:</label>
         <input type="text" name="code" required>
         <br>
@@ -27,6 +28,8 @@
             <tr>
                 <th>Mã sản phẩm</th>
                 <th>Tên sản phẩm</th>
+                <th>Hình ảnh</th>
+                <th>Thời gian</th>
             </tr>
         </thead>
         <tbody>
@@ -34,11 +37,19 @@
             <tr>
                 <td>{{ items.code }}</td>
                 <td>{{ items.name }}</td>
+                {% if items.image %}
+                    <td><img src="{{ url_for('static', filename='uploads/' + items.image) }}" alt="image" width="200" height="150"></td>
+                {% else %}
+                    <td>No image</td>
+                {% endif %}
+                <td>{{ items.timestamp.strftime('%H:%M:%S - %d/%m/%Y') }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
     {% endif %}
-    <a href="{{ url_for('home') }}">Trang chủ</a>
+
+
 </body>
 </html>

@@ -7,19 +7,29 @@
 
 </head>
 <body>
+<a href="{{ url_for('home') }}">Trang chủ</a>
 	<h1>Sản phẩm</h1>
 	<table>
 		<tr>
 			<th>Mã sản phẩm</th>
 			<th>Tên sản phẩm</th>
+			<th>Hình ảnh</th>
+			<th>Thời gian</th>
+
 		</tr>
 		{% for items in items %}
 		<tr>
 			<td>{{ items['code'] }}</td>
 			<td>{{ items['name'] }}</td>
+			{% if items.image %}
+                    <td><img src="{{ url_for('static', filename='uploads/' + items.image) }}" alt="image" width="200" height="150"></td>
+                {% else %}
+                    <td>No image</td>
+                {% endif %}
+			<td>{{ items.timestamp.strftime('%H:%M:%S - %d/%m/%Y') }}</td>
 		</tr>
 		{% endfor %}
 	</table>
-	<a href="{{ url_for('home') }}">Trang chủ</a>
+
 </body>
 </html>
