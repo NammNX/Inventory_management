@@ -32,31 +32,36 @@ def home():
 
 @app.route('/list_items')
 def list_items():
-    items = collection.find()
+    items = collection.find_one()  # Lấy một mục từ cơ sở dữ liệu (hoặc tuỳ chỉnh tùy theo dự án)
     return render_template('list_items.html', items=items)
 
-
-@app.route('/add_items', methods=['GET', 'POST'])
+@app.route('/robotkit/genItem', methods=['GET', 'POST'])
 def add_items():
     if request.method == 'POST':
-        name = request.form['name']
-        code = request.form['code']
-        current_time = datetime.now()
-        filename = None
+        data = request.get_json()
+        if 'Result' in data and 'UID' in data and 'OverAll' in data:
+            result = data['Result']
+            uid = data['UID']
+            overall = data['OverAll']
 
-        if 'image' in request.files:
-            image = request.files['image']
-            if image.filename != '':
-                # Nếu file hình ảnh được tải lên thì lưu vào folder UPLOAD_FOLDER
-                filename = secure_filename(image.filename)
-                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-        items = {'name': name, 'code': code, 'image': filename, 'timestamp': current_time}
-        collection.insert_one(items)
+            if isinstance(result, list):
+                for item_data in result:
+                    if 'Name' in item_data and 'Message' in item_data and 'ImgURL' in item_data:
+                        name = item_data['Name']
+                        message = item_data['Message']
+                        img_url = item_data['ImgURL']
+                        current_time = datetime.now()
+                        items_to_insert = {
+                            'Name': name,
+                            'Message': message,
+                            'ImgURL': img_url,
+                            'timestamp': current_time
+                        }
+                        collection.insert_one(items_to_insert)
 
     items = collection.find()
-    return render_template('add_items.html', items=items)
-
+    # Xác định giá trị cho uid, ví dụ: uid = data.get("UID", "")
+    return render_template('add_items.html', items=items, uid=uid, overall=overall)
 
 
 @app.route('/search_items', methods=['GET', 'POST'])
