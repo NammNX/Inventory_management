@@ -48,7 +48,7 @@ def add_items():
         # Trích xuất dữ liệu từ chuỗi JSON
         items_data = data['itemsData']
         label_data = data['labelData']
-        box_data = data['boxData']
+      #  box_data = data['boxData']
         uid = data['UID']
         overall = data['Overall']
 
@@ -79,16 +79,16 @@ def add_items():
             collection.insert_one(label_to_insert)
 
         # Lưu boxData
-            box_name = box_data['Name']
-            box_message = box_data['Message']
-            box_img_url = box_data['ImgURL']
-            box_to_insert = {
-            'Name': box_name,
-            'Message': box_message,
-            'ImgURL': box_img_url,
-            'timestamp': current_time
-        }
-            collection.insert_one(box_to_insert)
+          #  box_name = box_data['Name']
+           # box_message = box_data['Message']
+           # box_img_url = box_data['ImgURL']
+           # box_to_insert = {
+           # 'Name': box_name,
+           # 'Message': box_message,
+           # 'ImgURL': box_img_url,
+           # 'timestamp': current_time
+        #}
+         #   collection.insert_one(box_to_insert)
         # Lưu UID
             uid = {
             'UID': uid,
