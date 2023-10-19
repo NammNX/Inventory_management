@@ -5,6 +5,7 @@ from bson import ObjectId
 from flask import Flask, request, render_template, url_for, redirect, flash
 import pymongo
 import secrets
+import logging
 from werkzeug.utils import secure_filename
 
 
@@ -25,7 +26,8 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['mydatabase']
 collection = db['items']
-
+log_file = 'log.txt'
+logging.basicConfig(filename=log_file, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -35,33 +37,76 @@ def list_items():
     items = collection.find_one()  # Lấy một mục từ cơ sở dữ liệu (hoặc tuỳ chỉnh tùy theo dự án)
     return render_template('list_items.html', items=items)
 
-@app.route('/robotkit/genItem', methods=['GET', 'POST'])
+@app.route('/logisticskit/updateItem', methods=['POST'])
 def add_items():
     if request.method == 'POST':
         data = request.get_json()
-        if 'Result' in data and 'UID' in data and 'OverAll' in data:
-            result = data['Result']
-            uid = data['UID']
-            overall = data['OverAll']
+        print(data)
+        # Ghi log dữ liệu JSON vào tệp văn bản
+        logging.info("Received JSON data: %s", data)
 
-            if isinstance(result, list):
-                for item_data in result:
-                    if 'Name' in item_data and 'Message' in item_data and 'ImgURL' in item_data:
-                        name = item_data['Name']
-                        message = item_data['Message']
-                        img_url = item_data['ImgURL']
-                        current_time = datetime.now()
-                        items_to_insert = {
-                            'Name': name,
-                            'Message': message,
-                            'ImgURL': img_url,
-                            'timestamp': current_time
-                        }
-                        collection.insert_one(items_to_insert)
+        # Trích xuất dữ liệu từ chuỗi JSON
+        items_data = data['itemsData']
+        label_data = data['labelData']
+        box_data = data['boxData']
+        uid = data['UID']
+        overall = data['Overall']
+
+        # Lưu dữ liệu vào MongoDB
+        current_time = datetime.now()
+
+        # Lưu itemsData
+        for item in items_data:
+            items_to_insert = {
+                'Name': item,
+                'Message': 'Some default message',
+                'ImgURL': 'Some default URL',
+                'timestamp': current_time
+            }
+            collection.insert_one(items_to_insert)
+
+        # Lưu labelData
+        for label in label_data:
+            name = label['Name']
+            message = label['Message']
+            img_url = label['ImgURL']
+            label_to_insert = {
+                'Name': name,
+                'Message': message,
+                'ImgURL': img_url,
+                'timestamp': current_time
+            }
+            collection.insert_one(label_to_insert)
+
+        # Lưu boxData
+            box_name = box_data['Name']
+            box_message = box_data['Message']
+            box_img_url = box_data['ImgURL']
+            box_to_insert = {
+            'Name': box_name,
+            'Message': box_message,
+            'ImgURL': box_img_url,
+            'timestamp': current_time
+        }
+            collection.insert_one(box_to_insert)
+        # Lưu UID
+            uid = {
+            'UID': uid,
+            'timestamp': current_time
+             }
+            collection.insert_one(uid)
+        # Lưu  Overall
+            overall = {
+            'Overall': overall,
+            'timestamp': current_time
+            }
+            collection.insert_one(overall)
+
+
+
 
     items = collection.find()
-    # Xác định giá trị cho uid, ví dụ: uid = data.get("UID", "")
-    return render_template('add_items.html', items=items, uid=uid, overall=overall)
+    return render_template('list_items.html', items=items, uid=uid, overall=overall)
 
 
 @app.route('/search_items', methods=['GET', 'POST'])

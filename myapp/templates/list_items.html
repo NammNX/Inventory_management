@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Items</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-	<a href="{{ url_for('home') }}">Trang chủ</a>
-	<h1>Sản phẩm</h1>
-	<table>
-		<tr>
-			<th>Result</th>
-			<th>UID</th>
-			<th>OverAll</th>
-			<th>Thời gian</th>
-		</tr>
-		{% for item in items["Result"] %}
-		<tr>
-			<td>{{ item["Name"] }}</td>
-			<td>{{ item["Message"] }}</td>
-			<td>{{ item["ImgURL"] }}</td>
-			<td>{{ item.timestamp.strftime('%H:%M:%S - %d/%m/%Y') }}</td>
-		</tr>
-		{% endfor %}
-	</table>
+    <a href="{{ url_for('home') }}">Trang chủ</a>
+    <h1>Sản phẩm</h1>
+    <table>
+        <tr>
+            <th>Result</th>
+            <th>UID</th>
+            <th>OverAll</th>
+            <th>Thời gian</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item["Name"] }}</td>
+            <td>{{ item["Message"] }}</td>
+            <td>{{ item["ImgURL"] }}</td>
+            <td>{{ item.timestamp.strftime('%H:%M:%S - %d/%m/%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
